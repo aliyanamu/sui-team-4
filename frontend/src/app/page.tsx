@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
@@ -16,11 +17,12 @@ import {
   MOCHI_PETS_PACKAGE_ID,
 } from "@/lib/contracts";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 
 export default function Home() {
   const account = useCurrentAccount();
   const { pets, isLoading, refetch } = usePets();
+  const [searchQuery, setSearchQuery] = useState("");
   const suiClient = useSuiClient();
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
 
@@ -130,10 +132,24 @@ export default function Home() {
 
         {/* Pet Collection - Always show with mock data for dev */}
         <section className="collection-section">
-          <h2 className="section-title">
-            Your Pets {pets.length > 0 && `(${pets.length})`}
-            {!account && <span className="demo-badge">Demo Mode</span>}
-          </h2>
+          <div className="collection-header">
+            <h2 className="section-title">
+              Your Pets {pets.length > 0 && `(${pets.length})`}
+              {!account && <span className="demo-badge">Demo Mode</span>}
+            </h2>
+            <div className="search-bar">
+              <div className="icon-box">
+                <Search size={18} className="search-icon" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+            </div>
+          </div>
 
           {isLoading ? (
             <div className="loading-state">
@@ -142,7 +158,9 @@ export default function Home() {
             </div>
           ) : (
             <PetGrid
-              pets={pets}
+              pets={pets.filter((pet) =>
+                pet.name.toLowerCase().includes(searchQuery.toLowerCase())
+              )}
               onFeed={handleFeed}
               onTransfer={handleTransfer}
               onBurn={handleBurn}
@@ -155,105 +173,6 @@ export default function Home() {
       <footer className="footer">
         <p>Built with 💖 on SUI Network</p>
       </footer>
-
-      <style jsx>{`
-        .page-container {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem 2rem;
-          background: white;
-          border-bottom: 3px solid var(--nb-border);
-          position: sticky;
-          top: 0;
-          z-index: 100;
-        }
-        .logo {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
-        .logo-icon {
-          font-size: 2rem;
-          background: var(--nb-secondary);
-          padding: 0.25rem 0.5rem;
-          border: 3px solid var(--nb-border);
-        }
-        .logo-text {
-          font-size: 1.75rem;
-          font-weight: 900;
-          color: var(--nb-foreground);
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-        .main-content {
-          flex: 1;
-          padding: 2rem;
-          max-width: 1200px;
-          margin: 0 auto;
-          width: 100%;
-        }
-        .mint-section {
-          margin-bottom: 3rem;
-        }
-        .collection-section {
-          margin-bottom: 2rem;
-        }
-        .section-title {
-          font-size: 1.5rem;
-          font-weight: 900;
-          color: var(--nb-foreground);
-          margin-bottom: 1.5rem;
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-        .demo-badge {
-          font-size: 0.75rem;
-          font-weight: 800;
-          background: var(--nb-secondary);
-          color: black;
-          padding: 0.35rem 0.75rem;
-          border: 2px solid var(--nb-border);
-          text-transform: uppercase;
-        }
-        .loading-state {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1rem;
-          padding: 4rem 2rem;
-          color: var(--nb-foreground);
-          font-weight: 700;
-        }
-        .loading-state :global(.animate-spin) {
-          animation: spin 1s linear infinite;
-          color: var(--nb-foreground);
-        }
-        .footer {
-          text-align: center;
-          padding: 2rem;
-          background: white;
-          border-top: 3px solid var(--nb-border);
-          font-weight: 700;
-          color: var(--nb-foreground);
-        }
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </div>
   );
 }

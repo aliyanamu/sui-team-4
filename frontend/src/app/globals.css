@@ -105,6 +105,19 @@ margin-bottom: 3rem;
 margin-bottom: 2rem;
 }
 
+.collection-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1.5rem;
+flex-wrap: wrap;
+gap: 1rem;
+}
+
+.collection-header .section-title {
+margin-bottom: 0;
+}
+
 .section-title {
 font-size: 1.5rem;
 font-weight: 900;
@@ -115,6 +128,51 @@ align-items: center;
 gap: 1rem;
 text-transform: uppercase;
 letter-spacing: 0.05em;
+}
+
+.search-bar {
+display: flex;
+align-items: center;
+background: white;
+border: 3px solid var(--nb-border);
+box-shadow: var(--nb-shadow-sm);
+transition: all 0.1s ease;
+}
+
+.search-bar:focus-within {
+transform: translate(1px, 1px);
+box-shadow: 1px 1px 0px var(--nb-shadow);
+}
+
+.search-bar .icon-box {
+background: var(--nb-primary);
+padding: 0.75rem;
+display: flex;
+align-items: center;
+justify-content: center;
+border-right: 3px solid var(--nb-border);
+}
+
+.search-bar .search-icon {
+color: var(--nb-foreground);
+flex-shrink: 0;
+}
+
+.search-input {
+border: none;
+outline: none;
+font-size: 1rem;
+font-weight: 700;
+background: transparent;
+width: 180px;
+padding: 0.75rem 1rem;
+text-transform: uppercase;
+letter-spacing: 0.05em;
+}
+
+.search-input::placeholder {
+color: #666;
+font-weight: 700;
 }
 
 .demo-badge {
