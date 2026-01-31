@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 
 // Package ID - Deployed on testnet
-export const MOCHI_PETS_PACKAGE_ID = "0x8947af861fc84356afd1fd3521762c0a7c53c6993dd15d39409fbbe65ad01582";
+export const MOCHI_PETS_PACKAGE_ID = "0x7923e9e4997759416d5f071b7997b38aee6742caca3d8d7c92b090c92ae8d18b";
 
 // Object type for MochiPet
 export const MOCHI_PET_TYPE = `${MOCHI_PETS_PACKAGE_ID}::pet::MochiPet`;
@@ -10,7 +10,7 @@ export const MOCHI_PET_TYPE = `${MOCHI_PETS_PACKAGE_ID}::pet::MochiPet`;
 export const CLOCK_OBJECT_ID = "0x6";
 
 // Mint price in MIST (1 SUI = 1_000_000_000 MIST)
-export const MINT_PRICE_MIST = 100_000_000; // 0.1 SUI
+export const MINT_PRICE_MIST = 1_000_000; // 0.001 SUI
 
 /**
  * Build a mint transaction for a new pet

@@ -37,7 +37,7 @@ export interface SatietyBarProps {
 }
 
 // Constants
-export const MINT_PRICE_SUI = 0.1;
+export const MINT_PRICE_SUI = 0.001;
 export const MAX_SATIETY = 100;
 export const SATIETY_DECAY_PER_DAY = 10;
 export const FEED_AMOUNT = 30;

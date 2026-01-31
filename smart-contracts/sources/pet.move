@@ -7,7 +7,7 @@ use sui::event;
 use sui::sui::SUI;
 
 // ============ Constants ============
-const MINT_PRICE: u64 = 100_000_000; // 0.1 SUI
+const MINT_PRICE: u64 = 1_000_000; // 0.001 SUI
 const MAX_SATIETY: u64 = 100;
 const SATIETY_DECAY_PER_DAY: u64 = 10;
 const MS_PER_DAY: u64 = 86_400_000;
