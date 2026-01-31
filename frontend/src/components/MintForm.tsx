@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
-import { buildMintTransaction, MOCHI_PETS_PACKAGE_ID } from "@/lib/contracts";
+import { buildMintTransaction } from "@/lib/contracts";
 import { MINT_PRICE_SUI } from "@/types";
 import { toast } from "sonner";
 import { Sparkles, Loader2 } from "lucide-react";
@@ -22,13 +22,6 @@ export function MintForm({ onSuccess }: MintFormProps) {
 
     if (!name.trim()) {
       toast.error("Please enter a name for your pet");
-      return;
-    }
-
-    if (MOCHI_PETS_PACKAGE_ID === "0x0") {
-      toast.success(`Mock: Would mint pet named "${name}"! 🎉`);
-      setName("");
-      onSuccess?.();
       return;
     }
 

@@ -2,41 +2,8 @@
 
 import { useCurrentAccount, useSuiClientQuery } from "@mysten/dapp-kit";
 import { useMemo } from "react";
-import { Pet, MAX_SATIETY, SATIETY_DECAY_PER_DAY, MS_PER_DAY } from "@/types";
+import { Pet, SATIETY_DECAY_PER_DAY, MS_PER_DAY } from "@/types";
 import { MOCHI_PET_TYPE } from "@/lib/contracts";
-
-// Mock pets for development (until contract is deployed)
-// Using fixed timestamps to avoid hydration mismatch
-const MOCK_BORN_TIME_FLUFFY = 1706400000000; // Fixed timestamp
-const MOCK_BORN_TIME_MOCHI = 1706000000000;
-const MOCK_BORN_TIME_BOBA = 1705200000000;
-
-const MOCK_PETS: Pet[] = [
-  {
-    id: "0x123abc",
-    name: "Fluffy",
-    satiety: 85,
-    bornAt: MOCK_BORN_TIME_FLUFFY,
-    lastFed: MOCK_BORN_TIME_FLUFFY + 2 * MS_PER_DAY,
-    isAlive: true,
-  },
-  {
-    id: "0x456def",
-    name: "Mochi",
-    satiety: 45,
-    bornAt: MOCK_BORN_TIME_MOCHI,
-    lastFed: MOCK_BORN_TIME_MOCHI + 5 * MS_PER_DAY,
-    isAlive: true,
-  },
-  {
-    id: "0x789ghi",
-    name: "Boba",
-    satiety: 0,
-    bornAt: MOCK_BORN_TIME_BOBA,
-    lastFed: MOCK_BORN_TIME_BOBA,
-    isAlive: false,
-  },
-];
 
 /**
  * Calculate current satiety based on time decay
@@ -78,11 +45,6 @@ export function usePets() {
 
   // Transform on-chain data to Pet objects
   const pets = useMemo<Pet[]>(() => {
-    // Use mock data if contract not deployed (package ID is 0x0)
-    if (MOCHI_PET_TYPE.startsWith("0x0::")) {
-      return MOCK_PETS;
-    }
-
     if (!data?.data) return [];
 
     return data.data

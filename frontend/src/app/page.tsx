@@ -14,7 +14,6 @@ import {
   buildFeedTransaction,
   buildBurnTransaction,
   buildTransferTransaction,
-  MOCHI_PETS_PACKAGE_ID,
 } from "@/lib/contracts";
 import { toast } from "sonner";
 import { Loader2, Search } from "lucide-react";
@@ -27,12 +26,6 @@ export default function Home() {
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
 
   const handleFeed = async (petId: string) => {
-    // Mock mode
-    if (MOCHI_PETS_PACKAGE_ID === "0x0") {
-      toast.success("Mock: Fed pet! 🍙");
-      return;
-    }
-
     try {
       const tx = buildFeedTransaction(petId);
       await signAndExecute(
@@ -56,12 +49,6 @@ export default function Home() {
   };
 
   const handleTransfer = async (petId: string, recipient: string) => {
-    // Mock mode
-    if (MOCHI_PETS_PACKAGE_ID === "0x0") {
-      toast.success(`Mock: Transferred pet to ${recipient.slice(0, 8)}...! 📤`);
-      return;
-    }
-
     try {
       const tx = buildTransferTransaction(petId, recipient);
       await signAndExecute(
@@ -85,12 +72,6 @@ export default function Home() {
   };
 
   const handleBurn = async (petId: string) => {
-    // Mock mode
-    if (MOCHI_PETS_PACKAGE_ID === "0x0") {
-      toast.success("Mock: Burned dead pet. Rest in peace. 🕯️");
-      return;
-    }
-
     try {
       const tx = buildBurnTransaction(petId);
       await signAndExecute(
@@ -159,7 +140,7 @@ export default function Home() {
           ) : (
             <PetGrid
               pets={pets.filter((pet) =>
-                pet.name.toLowerCase().includes(searchQuery.toLowerCase())
+                pet.name.toLowerCase().includes(searchQuery.toLowerCase()),
               )}
               onFeed={handleFeed}
               onTransfer={handleTransfer}
