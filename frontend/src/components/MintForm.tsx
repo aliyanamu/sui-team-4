@@ -25,7 +25,6 @@ export function MintForm({ onSuccess }: MintFormProps) {
       return;
     }
 
-    // Check if contract is deployed
     if (MOCHI_PETS_PACKAGE_ID === "0x0") {
       toast.success(`Mock: Would mint pet named "${name}"! 🎉`);
       setName("");
@@ -85,83 +84,6 @@ export function MintForm({ onSuccess }: MintFormProps) {
           )}
         </button>
       </div>
-
-      <style jsx>{`
-        .mint-form {
-          width: 100%;
-          max-width: 700px;
-          margin: 0 auto;
-        }
-        .form-content {
-          display: flex;
-          align-items: stretch;
-          gap: 0;
-          background: white;
-          border: 3px solid var(--nb-border);
-          box-shadow: var(--nb-shadow-lg);
-        }
-        .form-content :global(.icon-box) {
-          background: var(--nb-secondary);
-          padding: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-right: 3px solid var(--nb-border);
-        }
-        .form-content input {
-          flex: 1;
-          border: none;
-          outline: none;
-          font-size: 1rem;
-          font-weight: 700;
-          background: transparent;
-          min-width: 0;
-          padding: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-        .form-content input::placeholder {
-          color: #666;
-        }
-        .form-content button {
-          background: var(--nb-accent);
-          color: black;
-          border: none;
-          border-left: 3px solid var(--nb-border);
-          padding: 1rem 1.5rem;
-          font-weight: 900;
-          font-size: 0.875rem;
-          cursor: pointer;
-          transition: all 0.1s ease;
-          white-space: nowrap;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-        .form-content button:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-        .form-content button:not(:disabled):hover {
-          background: #8ce8a8;
-        }
-        .form-content button:not(:disabled):active {
-          background: #7dd798;
-        }
-        .form-content :global(.animate-spin) {
-          animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-      `}</style>
     </form>
   );
 }

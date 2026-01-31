@@ -51,32 +51,12 @@ export function PetGrid({
 
       {transferPet && (
         <TransferModal
-          petId={transferPet.id}
           petName={transferPet.name}
           isOpen={!!transferPet}
           onClose={() => setTransferPet(null)}
           onConfirm={handleTransferConfirm}
         />
       )}
-
-      <style jsx>{`
-        .pet-grid {
-          display: grid;
-          grid-template-columns: repeat(1, 1fr);
-          gap: 1.5rem;
-          width: 100%;
-        }
-        @media (min-width: 640px) {
-          .pet-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-        @media (min-width: 1024px) {
-          .pet-grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-      `}</style>
     </>
   );
 }
