@@ -1,0 +1,24 @@
+{
+  "network": "testnet",
+  "deployedAt": "2025-01-31T19:20:00Z",
+  "transactionDigest": "3iwzw11AwQGuC5o6hsyeiFqaKr4i5utmUzswoZnzvJd4",
+  "packageId": "0x8947af861fc84356afd1fd3521762c0a7c53c6993dd15d39409fbbe65ad01582",
+  "modules": ["pet"],
+  "upgradeCap": {
+    "objectId": "0xdf506a435f35a1361a195d8f99310c4ea9e97410ccfec91f8295e3d098b496b8",
+    "owner": "0x86d4f2d469cf4366196de8054aabb9c1ed3396e65c091079542603f11b24881f"
+  },
+  "deployer": "0x86d4f2d469cf4366196de8054aabb9c1ed3396e65c091079542603f11b24881f",
+  "gasCost": {
+    "storageCost": "17191200 MIST",
+    "computationCost": "1000000 MIST",
+    "storageRebate": "978120 MIST",
+    "totalCost": "17213080 MIST"
+  },
+  "contracts": {
+    "pet": {
+      "module": "mochi_pets::pet",
+      "type": "0x8947af861fc84356afd1fd3521762c0a7c53c6993dd15d39409fbbe65ad01582::pet::MochiPet"
+    }
+  }
+}

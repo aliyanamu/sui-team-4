@@ -1,0 +1,9 @@
+[package]
+name = "mochi_pets"
+version = "0.0.1"
+edition = "2024.beta"
+
+[dependencies]
+
+[addresses]
+mochi_pets = "0x0"

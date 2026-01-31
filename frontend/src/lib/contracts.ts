@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 
-// Package ID - Replace with deployed contract address
-export const MOCHI_PETS_PACKAGE_ID = "0x0"; // TODO: Update after deployment
+// Package ID - Deployed on testnet
+export const MOCHI_PETS_PACKAGE_ID = "0x8947af861fc84356afd1fd3521762c0a7c53c6993dd15d39409fbbe65ad01582";
 
 // Object type for MochiPet
 export const MOCHI_PET_TYPE = `${MOCHI_PETS_PACKAGE_ID}::pet::MochiPet`;
