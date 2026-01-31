@@ -1,7 +1,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 
-// Package ID - Deployed on testnet
-export const MOCHI_PETS_PACKAGE_ID = "0x7923e9e4997759416d5f071b7997b38aee6742caca3d8d7c92b090c92ae8d18b";
+// Package ID - Deployed on testnet (v2 with Display support)
+export const MOCHI_PETS_PACKAGE_ID = "0xa4e2cf5632ab87f86ac632213b7173bc631660a045e909349bd4d6c197f23791";
 
 // Object type for MochiPet
 export const MOCHI_PET_TYPE = `${MOCHI_PETS_PACKAGE_ID}::pet::MochiPet`;

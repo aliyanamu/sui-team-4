@@ -18,22 +18,20 @@ export function PetCard({
   onBurn,
   isLoading,
 }: PetCardProps) {
-  const getPetFace = () => {
-    if (!pet.isAlive) return "(✖_✖)";
-    if (pet.satiety > 70) return "(◕‿◕)";
-    if (pet.satiety > 40) return "(◕_◕)";
-    if (pet.satiety > 20) return "(◕︿◕)";
-    return "(⊙﹏⊙)";
-  };
-
   const MS_PER_DAY = 86_400_000;
-  const days = Math.floor((1738300800000 - pet.bornAt) / MS_PER_DAY);
+  const days = Math.floor((Date.now() - pet.bornAt) / MS_PER_DAY);
   const daysOldText =
     days <= 0 ? "Just born" : days === 1 ? "1 day old" : `${days} days old`;
 
   return (
     <div className={`pet-card ${!pet.isAlive ? "dead" : ""}`}>
-      <div className="pet-face">{getPetFace()}</div>
+      <img
+        src={`/api/pet-image/${pet.id}`}
+        alt={pet.name}
+        className="pet-avatar"
+        width={128}
+        height={128}
+      />
       <h3 className="pet-name">&quot;{pet.name}&quot;</h3>
       <p className="pet-age">{daysOldText}</p>
 

@@ -3,8 +3,13 @@ module mochi_pets::pet;
 use std::string::String;
 use sui::clock::{Self, Clock};
 use sui::coin::{Self, Coin};
+use sui::display;
 use sui::event;
+use sui::package;
 use sui::sui::SUI;
+
+// ============ One-Time Witness ============
+public struct PET has drop {}
 
 // ============ Constants ============
 const MINT_PRICE: u64 = 1_000_000; // 0.001 SUI
@@ -50,8 +55,34 @@ public struct PetBurned has copy, drop {
     name: String,
 }
 
+// ============ Init ============
+fun init(otw: PET, ctx: &mut TxContext) {
+    let publisher = package::claim(otw, ctx);
+
+    let mut display = display::new_with_fields<MochiPet>(
+        &publisher,
+        vector[
+            b"name".to_string(),
+            b"description".to_string(),
+            b"image_url".to_string(),
+            b"project_url".to_string(),
+        ],
+        vector[
+            b"{name}".to_string(),
+            b"A MochiPet named {name}. Feed it daily to keep it alive!".to_string(),
+            b"https://YOUR_FRONTEND_URL/api/pet-image/{id}".to_string(),
+            b"https://YOUR_FRONTEND_URL".to_string(),
+        ],
+        ctx
+    );
+
+    display::update_version(&mut display);
+
+    transfer::public_transfer(publisher, ctx.sender());
+    transfer::public_transfer(display, ctx.sender());
+}
+
 // ============ Mint ============
-#[allow(lint(self_transfer))]
 public fun mint(
     payment: Coin<SUI>,
     name: String,
