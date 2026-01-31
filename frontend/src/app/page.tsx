@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
@@ -9,6 +9,7 @@ import {
 import { WalletButton } from "@/components/WalletButton";
 import { MintForm } from "@/components/MintForm";
 import { PetGrid } from "@/components/PetGrid";
+import { ShowcaseGrid } from "@/components/ShowcaseGrid";
 import { usePets } from "@/hooks/usePets";
 import {
   buildFeedTransaction,
@@ -16,12 +17,11 @@ import {
   buildTransferTransaction,
 } from "@/lib/contracts";
 import { toast } from "sonner";
-import { Loader2, Search } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export default function Home() {
   const account = useCurrentAccount();
   const { pets, isLoading, refetch } = usePets();
-  const [searchQuery, setSearchQuery] = useState("");
   const suiClient = useSuiClient();
   const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
 
@@ -99,7 +99,13 @@ export default function Home() {
       {/* Header */}
       <header className="header">
         <div className="logo">
-          <span className="logo-icon">🍡</span>
+          <Image
+            src="/logo.png"
+            alt="MochiPets"
+            width={40}
+            height={40}
+            className="logo-icon"
+          />
           <span className="logo-text">MochiPets</span>
         </div>
         <WalletButton />
@@ -113,24 +119,10 @@ export default function Home() {
 
         {/* Pet Collection - Always show with mock data for dev */}
         <section className="collection-section">
-          <div className="collection-header">
-            <h2 className="section-title">
-              Your Pets {pets.length > 0 && `(${pets.length})`}
-              {!account && <span className="demo-badge">Demo Mode</span>}
-            </h2>
-            <div className="search-bar">
-              <div className="icon-box">
-                <Search size={18} className="search-icon" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-input"
-              />
-            </div>
-          </div>
+          <h2 className="section-title">
+            Your Pets {pets.length > 0 && `(${pets.length})`}
+            {!account && <span className="demo-badge">Demo Mode</span>}
+          </h2>
 
           {isLoading ? (
             <div className="loading-state">
@@ -139,20 +131,22 @@ export default function Home() {
             </div>
           ) : (
             <PetGrid
-              pets={pets.filter((pet) =>
-                pet.name.toLowerCase().includes(searchQuery.toLowerCase()),
-              )}
+              pets={pets}
               onFeed={handleFeed}
               onTransfer={handleTransfer}
               onBurn={handleBurn}
             />
           )}
         </section>
+
+        <section className="collection-section showcase-section">
+          <ShowcaseGrid />
+        </section>
       </main>
 
       {/* Footer */}
       <footer className="footer">
-        <p>Built with 💖 on SUI Network</p>
+        <p>Built on SUI Network</p>
       </footer>
     </div>
   );

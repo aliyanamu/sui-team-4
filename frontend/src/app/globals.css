@@ -75,10 +75,7 @@ gap: 0.75rem;
 }
 
 .logo-icon {
-font-size: 2rem;
-background: var(--nb-secondary);
-padding: 0.25rem 0.5rem;
-border: 3px solid var(--nb-border);
+border-radius: 8px;
 }
 
 .logo-text {
@@ -434,6 +431,63 @@ box-shadow: var(--nb-shadow-sm);
 .pet-card .btn-burn:hover:not(:disabled) {
 transform: translate(1px, 1px);
 box-shadow: 1px 1px 0px var(--nb-shadow);
+}
+
+.pet-card .btn-disabled {
+background: #ccc;
+color: #666;
+cursor: not-allowed;
+box-shadow: none;
+}
+
+.pet-card.showcase {
+opacity: 0.9;
+}
+
+.pet-card .status-label {
+font-size: 0.875rem;
+font-weight: 900;
+padding: 0.5rem 1rem;
+border: 3px solid var(--nb-border);
+text-transform: uppercase;
+margin-bottom: 1rem;
+}
+
+.pet-card .status-label.dead {
+background: var(--nb-danger);
+color: white;
+}
+
+.pet-card .status-label.critical {
+background: #ff6b6b;
+color: white;
+animation: pulse 1s ease-in-out infinite;
+}
+
+.pet-card .status-label.warning {
+background: var(--nb-secondary);
+color: black;
+}
+
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.7; }
+}
+
+/* ===== SHOWCASE SECTION ===== */
+.showcase-section {
+margin-top: 3rem;
+padding-top: 2rem;
+}
+
+.showcase-section .section-title {
+color: #666;
+}
+
+.showcase-desc {
+color: #666;
+font-weight: 600;
+margin-bottom: 1.5rem;
 }
 
 /* ===== SATIETY BAR ===== */
