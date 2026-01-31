@@ -17,9 +17,10 @@
 | Mint multiple pets | Gacha/randomness |
 | ONE stat (Satiety) | Happiness, Energy, Hygiene |
 | ONE action (Feed) | Play, Rest, Bath |
-| Death = Burn | Danger zone warnings |
-| Pet collection view | Animations, sound |
-| Wallet connect | Leaderboards, social |
+| Transfer pets | Danger zone warnings |
+| Death = Burn | Animations, sound |
+| Pet collection view | Leaderboards, social |
+| Wallet connect | |
 
 ---
 
@@ -114,6 +115,19 @@ module mochi_pets::pet {
         pet.last_fed = now;
     }
 
+    // ============ Transfer ============
+    public entry fun transfer_pet(
+        pet: MochiPet,
+        recipient: address,
+        clock: &Clock,
+    ) {
+        // Can only transfer living pets
+        let current_satiety = calculate_current_satiety(&pet, clock::timestamp_ms(clock));
+        assert!(current_satiety > 0, EPetIsDead);
+
+        transfer::public_transfer(pet, recipient);
+    }
+
     // ============ Check & Burn ============
     public entry fun check_and_burn(
         pet: MochiPet,
@@ -159,6 +173,7 @@ module mochi_pets::pet {
 |----------|--------------|
 | `mint()` | Pay 0.1 SUI → Get pet with 100 satiety (no limit, mint as many as you want) |
 | `feed()` | Add +30 satiety (max 100) |
+| `transfer_pet()` | Send pet to another wallet (only if alive) |
 | `check_and_burn()` | If satiety = 0, delete pet forever |
 | `get_current_satiety()` | Calculate live satiety based on time |
 
@@ -178,6 +193,7 @@ src/
 │   ├── PetCard.tsx        # Single pet display
 │   ├── SatietyBar.tsx     # Stat bar component
 │   ├── MintForm.tsx       # Mint new pet form
+│   ├── TransferModal.tsx  # Send pet to another wallet
 │   └── EmptyState.tsx     # No pets message
 │
 ├── hooks/
@@ -209,13 +225,13 @@ Shows all user's pets in a grid. Mint button always visible.
 │                                                     │
 │  Your Pets (3)                                      │
 │                                                     │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │
-│  │   (◕‿◕)     │ │   (◕‿◕)     │ │   (✖_✖)     │   │
-│  │  "Fluffy"   │ │  "Mochi"    │ │  "Boba"     │   │
-│  │ ████████░░  │ │ ██████░░░░  │ │ ░░░░░░░░░░  │   │
-│  │   80/100    │ │   60/100    │ │   DEAD      │   │
-│  │  [Feed]     │ │  [Feed]     │ │  [Burn]     │   │
-│  └─────────────┘ └─────────────┘ └─────────────┘   │
+│  ┌───────────────┐ ┌───────────────┐ ┌───────────────┐ │
+│  │    (◕‿◕)      │ │    (◕‿◕)      │ │    (✖_✖)      │ │
+│  │   "Fluffy"    │ │   "Mochi"     │ │   "Boba"      │ │
+│  │  ████████░░   │ │  ██████░░░░   │ │  ░░░░░░░░░░   │ │
+│  │    80/100     │ │    60/100     │ │    DEAD       │ │
+│  │ [Feed] [Send] │ │ [Feed] [Send] │ │    [Burn]     │ │
+│  └───────────────┘ └───────────────┘ └───────────────┘ │
 │                                                     │
 │  ─────────────────────────────────────────────────  │
 │  No pets yet? Mint your first companion above!      │
@@ -240,9 +256,31 @@ When user clicks on a pet card:
 │  Born: 3 days ago                   │
 │  ID: 0x7f8a...                      │
 │                                     │
-│    ┌─────────────────────┐          │
-│    │       🍙 Feed        │          │
-│    └─────────────────────┘          │
+│    ┌───────────┐  ┌───────────┐     │
+│    │  🍙 Feed  │  │  📤 Send  │     │
+│    └───────────┘  └───────────┘     │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+### Screen 3: Transfer Modal
+
+When user clicks "Send":
+
+```
+┌─────────────────────────────────────┐
+│  Send "Fluffy" to another wallet    │
+│                                     │
+│  Recipient Address:                 │
+│  ┌─────────────────────────────┐    │
+│  │ 0x...                       │    │
+│  └─────────────────────────────┘    │
+│                                     │
+│  ⚠️  This action cannot be undone   │
+│                                     │
+│    ┌───────────┐  ┌───────────┐     │
+│    │  Cancel   │  │  Confirm  │     │
+│    └───────────┘  └───────────┘     │
 │                                     │
 └─────────────────────────────────────┘
 ```
@@ -291,6 +329,7 @@ When user clicks on a pet card:
 interface PetGridProps {
   pets: Pet[];
   onFeed: (petId: string) => void;
+  onTransfer: (petId: string, recipient: string) => void;
   onBurn: (petId: string) => void;
 }
 ```
@@ -307,13 +346,28 @@ interface PetCardProps {
   bornAt: number;       // timestamp
   isAlive: boolean;
   onFeed: () => void;
+  onTransfer: () => void;
   onBurn: () => void;
 }
 ```
 - Shows pet emoji/image based on status
 - Satiety bar with color gradient (green → yellow → red)
-- Feed button (if alive) or Burn button (if dead)
+- Feed + Transfer buttons (if alive) or Burn button (if dead)
 - Compact card design for grid view
+
+### `TransferModal.tsx`
+```tsx
+interface TransferModalProps {
+  petId: string;
+  petName: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (recipient: string) => void;
+}
+```
+- Input field for recipient wallet address
+- Confirm/cancel buttons
+- Validates SUI address format
 
 ### `MintForm.tsx`
 - Input field for pet name
@@ -357,6 +411,7 @@ interface SatietyBarProps {
 5. User interactions:
    ├─ Mint → Pays 0.1 SUI, new pet appears in grid
    ├─ Feed → Pet's satiety restored, card updates
+   ├─ Transfer → Pet sent to another wallet, removed from grid
    └─ Burn → Dead pet removed from grid forever
 ```
 
@@ -392,10 +447,12 @@ interface SatietyBarProps {
 - [ ] Show alive/dead state per pet
 
 ### 5. Actions
-- [ ] Create `MintButton` with name input
+- [ ] Create `MintForm` with name input
 - [ ] Wire mint to contract
 - [ ] Create `FeedButton`
 - [ ] Wire feed to contract
+- [ ] Create `TransferModal` with address input
+- [ ] Wire transfer to contract
 - [ ] Add burn flow for dead pets
 
 ### 6. Polish
@@ -468,9 +525,10 @@ At the end of Phase 1:
 4. Each pet has its own satiety bar
 5. Satiety decreases over time (calculated on-chain)
 6. User can feed any pet to restore its satiety
-7. If user neglects a pet, its satiety hits 0
-8. Dead pets can be burned (deleted forever)
-9. User can keep minting more pets anytime
+7. User can transfer living pets to other wallets
+8. If user neglects a pet, its satiety hits 0
+9. Dead pets can be burned (deleted forever)
+10. User can keep minting more pets anytime
 
 **That's it. Nothing else.**
 
